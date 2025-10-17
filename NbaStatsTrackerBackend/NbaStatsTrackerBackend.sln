@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0 d17.14
+VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbaStatsTrackerBackend", "NbaStatsTrackerBackend.csproj", "{1B2AFEC1-F75B-4B0A-BA4C-BEB39526C764}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbaStatsTrackerBackend.Domain", "..\NbaStatsTrackerBackend.Domain\NbaStatsTrackerBackend.Domain.csproj", "{31BF1E9E-96CC-4E6B-AD4D-17FB9FC853E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NbaStatsTrackerBackend.Application", "..\NbaStatsTrackerBackend.Application\NbaStatsTrackerBackend.Application.csproj", "{D104EC9A-64C1-4F58-83A6-B11E55931EEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{1B2AFEC1-F75B-4B0A-BA4C-BEB39526C764}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B2AFEC1-F75B-4B0A-BA4C-BEB39526C764}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B2AFEC1-F75B-4B0A-BA4C-BEB39526C764}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31BF1E9E-96CC-4E6B-AD4D-17FB9FC853E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31BF1E9E-96CC-4E6B-AD4D-17FB9FC853E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31BF1E9E-96CC-4E6B-AD4D-17FB9FC853E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31BF1E9E-96CC-4E6B-AD4D-17FB9FC853E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D104EC9A-64C1-4F58-83A6-B11E55931EEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D104EC9A-64C1-4F58-83A6-B11E55931EEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D104EC9A-64C1-4F58-83A6-B11E55931EEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D104EC9A-64C1-4F58-83A6-B11E55931EEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
