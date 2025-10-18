@@ -3,10 +3,10 @@
     public sealed class Player
     {
         public int Id { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string Position { get; }
-        public string? Height { get; }
+        public string FirstName { get; } = string.Empty;
+        public string LastName { get; } = string.Empty;
+        public string Position { get; } = string.Empty;
+        public string? Height { get; }  
         public string? Weight { get; }
         public string? JerseyNumber { get; }
         public string? College { get; }

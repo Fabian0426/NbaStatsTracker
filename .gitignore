@@ -482,3 +482,10 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+*.sln
+
+appsettings.Development.json
+
+NbaStatsTrackerBackend/NbaStatsTrackerBackend.sln
+*.sln
+*.sln
