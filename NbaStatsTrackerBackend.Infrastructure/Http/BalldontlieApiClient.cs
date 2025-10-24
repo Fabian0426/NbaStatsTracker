@@ -24,16 +24,16 @@ public class BalldontlieApiClient
 
 
 
-    public async Task<T?> GetAsync<T>(string endpoint, CancellationToken ct = default)
+    public async Task<T?> GetAsync<T>(string endpoint, CancellationToken cancelationToken = default)
     {
         _logger.LogInformation("Fetching data from {Endpoint}", endpoint);
 
         try
         {
-            var response = await _httpClient.GetAsync(endpoint, ct);
+            var response = await _httpClient.GetAsync(endpoint, cancelationToken);
             response.EnsureSuccessStatusCode();
 
-            var json = await response.Content.ReadAsStringAsync(ct);
+            var json = await response.Content.ReadAsStringAsync(cancelationToken);
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             return JsonSerializer.Deserialize<T>(json, options);
         }

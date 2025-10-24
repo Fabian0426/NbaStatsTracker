@@ -1,4 +1,4 @@
 ﻿namespace NbaStatsTrackerBackend.Application.UseCases.GetAllTeams
 {
-    public record GetAllTeamsResponse(IReadOnlyList<NbaStatsTrackerBackend.Domain.Entities.Players> Teams);
+    public record GetAllTeamsResponse(IReadOnlyList<NbaStatsTrackerBackend.Domain.Entities.Teams> Teams);
 }

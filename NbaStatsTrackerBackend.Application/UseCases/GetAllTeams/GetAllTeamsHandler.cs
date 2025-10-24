@@ -1,44 +1,46 @@
-﻿//using MediatR;
-//using NbaStatsTrackerBackend.Domain.Entities;
-//using System.Text.Json;
+﻿using MediatR;
+using NbaStatsTrackerBackend.Domain.Entities;
+using System.Text.Json;
 
-//namespace NbaStatsTrackerBackend.Application.UseCases.GetAllTeams;
+namespace NbaStatsTrackerBackend.Application.UseCases.GetAllTeams;
 
-//public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeamsResponse>
-//{
-//    private readonly Infrastructure.Http.BalldontlieApiClient _apiClient;
+public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeamsResponse>
+{
+    private readonly Infrastructure.Http.BalldontlieApiClient _apiClient;
 
-//    public GetAllTeamsHandler(Infrastructure.Http.BalldontlieApiClient apiClient)
-//    {
-//        _apiClient = apiClient;
-//    }
+    public GetAllTeamsHandler(Infrastructure.Http.BalldontlieApiClient apiClient)
+    {
+        _apiClient = apiClient;
+    }
 
-//    public async Task<GetAllTeamsResponse> Handle(GetAllTeamsRequest request, CancellationToken ct)
-//    {
-//        List<string> queryParams = new List<string>();
+    public async Task<GetAllTeamsResponse> Handle(
+        GetAllTeamsRequest request, 
+        CancellationToken cancellationToken)
+    {
+        List<string> queryParams = new List<string>();
 
-//        var endpoint = "v1/teams";
-//        if (queryParams.Any())
-//            endpoint += "?" + string.Join("&", queryParams);
+        string endpoint = "v1/teams";
+        if (queryParams.Any())
+            endpoint += "?" + string.Join("&", queryParams);
 
-//        JsonDocument? jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, ct);
+        JsonDocument? jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, cancellationToken);
 
-//        if (jsonDocument?.RootElement.TryGetProperty("data", out var data) != true)
-//            return new GetAllTeamsResponse([]);
+        if (jsonDocument?.RootElement.TryGetProperty("data", out var data) != true)
+            return new GetAllTeamsResponse([]);
 
-//        var teams = data.EnumerateArray()
-//            .Select(teamElement => new Teams
-//            {
-//                Id = teamElement.GetProperty("id"),
-//                Conference = teamElement.GetProperty("conference").GetString() ?? string.Empty,
-//                Division = teamElement.GetProperty("division").GetString() ?? string.Empty,
-//                City = teamElement.GetProperty("city").GetString() ?? string.Empty,
-//                Name = teamElement.GetProperty("name").GetString() ?? string.Empty,
-//                FullName = teamElement.GetProperty("full_name").GetString() ?? string.Empty,
-//                Abbreviation = teamElement.GetProperty("abbreviation").GetString() ?? string.Empty
-//            })
-//            .ToList();
+        List<Teams> teams = new List<Teams>();
+        foreach (var teamElement in data.EnumerateArray())
+        {
+            teams.Add(new Teams(
+                teamElement.GetProperty("id").GetInt32(),
+                teamElement.GetProperty("conference").GetString() ?? string.Empty,
+                teamElement.GetProperty("division").GetString() ?? string.Empty,
+                teamElement.GetProperty("city").GetString() ?? string.Empty,
+                teamElement.GetProperty("name").GetString() ?? string.Empty,
+                teamElement.GetProperty("full_name").GetString() ?? string.Empty,
+                teamElement.GetProperty("abbreviation").GetString() ?? string.Empty));
+        }
 
-//        return new GetAllTeamsResponse(teams);
-//    }
-//}
+        return new GetAllTeamsResponse(teams);
+    }
+}
