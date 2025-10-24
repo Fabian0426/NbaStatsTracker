@@ -3,7 +3,7 @@ using NbaStatsTrackerBackend.Domain.Entities;
 
 namespace NbaStatsTrackerBackend.Domain.Validators
 {
-    public sealed class TeamValidator : AbstractValidator<Team>
+    public sealed class TeamValidator : AbstractValidator<Entities.NbaStatsTrackerBackend>
     {
         public TeamValidator()
         {

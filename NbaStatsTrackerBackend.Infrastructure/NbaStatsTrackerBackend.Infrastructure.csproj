@@ -15,5 +15,4 @@
 		<PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.10" />
 
 	</ItemGroup>
-
 </Project>
