@@ -78,11 +78,8 @@ _ReSharper.*/
 *.xlsx
 *.ppt
 *.pptx
-*.pdf
-*.md
 *.json
 *.yml
-*.txt
 *.xml
 *.editorconfig
 *.gitattributes

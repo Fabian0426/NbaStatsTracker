@@ -15,7 +15,7 @@ public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeam
     }
 
     public async Task<GetAllTeamsResponse> Handle(
-        GetAllTeamsRequest request, 
+        GetAllTeamsRequest request,
         CancellationToken cancellationToken)
     {
         List<string> queryParams = new List<string>();

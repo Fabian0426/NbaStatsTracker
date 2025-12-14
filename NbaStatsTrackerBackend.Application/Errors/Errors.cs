@@ -2,6 +2,8 @@
 {
     public class Errors
     {
-        public const string TeamNotFound = "The specified team was not found.";
+        public const string TeamsNotFound = "The nba teams were not found.";
+        public const string SpecificTeamNotFound = "The specified team was not found.";
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NbaStatsTrackerBackend.Application;
 using NbaStatsTrackerBackend.Application.UseCases.GetAllTeams;
 using NbaStatsTrackerBackend.Application.Interfaces; 
 using NbaStatsTrackerBackend.Infrastructure.Config;
@@ -23,8 +24,7 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddMediatR(cfg =>
-    cfg.RegisterServicesFromAssemblyContaining<GetAllTeamsRequest>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(NbaStatsTrackerBackend.Application.DependencyInjection).Assembly));
 
 var app = builder.Build();
 

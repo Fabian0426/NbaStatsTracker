@@ -2,5 +2,3 @@
 {
     public record GetAllTeamsResponse(IReadOnlyList<NbaStatsTrackerBackend.Domain.Entities.NbaTeams> Teams);
 }
-
-
