@@ -1,11 +1,12 @@
-﻿using System.Text.Json;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Logging;
+using NbaStatsTrackerBackend.Application.Interfaces;
 using NbaStatsTrackerBackend.Infrastructure.Config;
+using System.Text.Json;
 
 namespace NbaStatsTrackerBackend.Infrastructure.Http;
 
-public class BalldontlieApiClient
+public class BalldontlieApiClient : IBalldontlieApiClient
 {
     private readonly HttpClient _httpClient;
     private readonly ILogger<BalldontlieApiClient> _logger;
@@ -23,8 +24,7 @@ public class BalldontlieApiClient
     }
 
 
-
-    public async Task<T?> GetAsync<T>(string endpoint, CancellationToken cancelationToken = default)
+    public async Task<JsonDocument?> GetAsync<T>(string endpoint, CancellationToken cancelationToken = default)
     {
         _logger.LogInformation("Fetching data from {Endpoint}", endpoint);
 
@@ -34,8 +34,7 @@ public class BalldontlieApiClient
             response.EnsureSuccessStatusCode();
 
             var json = await response.Content.ReadAsStringAsync(cancelationToken);
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            return JsonSerializer.Deserialize<T>(json, options);
+            return JsonDocument.Parse(json);
         }
         catch (Exception ex)
         {

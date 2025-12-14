@@ -1,10 +1,10 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace NbaStatsTrackerBackend.Application.Behaviors;
 
 public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
     private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
 
@@ -15,15 +15,9 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
     {
-        var requestName = typeof(TRequest).Name;
-
-        _logger.LogInformation("Handling request: {RequestName}", requestName);
-
+        _logger.LogInformation("Handling {RequestName}", typeof(TRequest).Name);
         var response = await next();
-
-        _logger.LogInformation("Handled request: {RequestName} → Response: {ResponseType}",
-            requestName,
-            typeof(TResponse).Name);
+        _logger.LogInformation("Handled {RequestName}", typeof(TRequest).Name);
 
         return response;
     }

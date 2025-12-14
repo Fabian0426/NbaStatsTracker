@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using NbaStatsTrackerBackend.Application.Interfaces;
 using NbaStatsTrackerBackend.Domain.Entities;
 using System.Text.Json;
 
@@ -6,9 +7,9 @@ namespace NbaStatsTrackerBackend.Application.UseCases.GetAllTeams;
 
 public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeamsResponse>
 {
-    private readonly Infrastructure.Http.BalldontlieApiClient _apiClient;
+    private readonly IBalldontlieApiClient _apiClient;
 
-    public GetAllTeamsHandler(Infrastructure.Http.BalldontlieApiClient apiClient)
+    public GetAllTeamsHandler(IBalldontlieApiClient apiClient)
     {
         _apiClient = apiClient;
     }
@@ -23,19 +24,19 @@ public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeam
         if (queryParams.Any())
             endpoint += "?" + string.Join("&", queryParams);
 
-        JsonDocument? jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, cancellationToken);
+        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint);
 
         if (jsonDocument?.RootElement.TryGetProperty("data", out var data) != true)
             return new GetAllTeamsResponse([]);
 
-        List<Teams> teams = new List<Teams>();
+        List<NbaTeams> teams = new List<NbaTeams>();
         foreach (var teamElement in data.EnumerateArray())
         {
-            teams.Add(new Teams(
+            teams.Add(new NbaTeams(
                 teamElement.GetProperty("id").GetInt32(),
-                teamElement.GetProperty("conference").GetString() ?? string.Empty,
-                teamElement.GetProperty("division").GetString() ?? string.Empty,
-                teamElement.GetProperty("city").GetString() ?? string.Empty,
+                teamElement.GetProperty("conference").GetString() is string c && !string.IsNullOrWhiteSpace(c) ? c : " -- ",
+                teamElement.GetProperty("division").GetString() is string d && !string.IsNullOrWhiteSpace(d) ? d : "no division avalaible",
+                teamElement.GetProperty("city").GetString() is string city && !string.IsNullOrWhiteSpace(city) ? city : "team no longer has a city because it not exists",
                 teamElement.GetProperty("name").GetString() ?? string.Empty,
                 teamElement.GetProperty("full_name").GetString() ?? string.Empty,
                 teamElement.GetProperty("abbreviation").GetString() ?? string.Empty));

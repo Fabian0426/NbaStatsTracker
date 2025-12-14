@@ -1,6 +1,6 @@
 ﻿namespace NbaStatsTrackerBackend.Domain.Entities
 {
-    public sealed class Teams
+    public sealed class NbaTeams
     {
         public int Id { get; }
         public string Conference { get; } = string.Empty;
@@ -10,7 +10,7 @@
         public string FullName { get; } = string.Empty;
         public string Abbreviation { get; } = string.Empty;
 
-        public Teams(
+        public NbaTeams(
             int id,
             string conference,
             string division,

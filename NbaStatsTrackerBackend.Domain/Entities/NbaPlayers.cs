@@ -1,6 +1,6 @@
 ﻿namespace NbaStatsTrackerBackend.Domain.Entities
 {
-    public sealed class Players
+    public sealed class NbaPlayers
     {
         public int Id { get; }
         public string FirstName { get; } = string.Empty;
@@ -14,9 +14,9 @@
         public int? DraftYear { get; }
         public int? DraftRound { get; }
         public int? DraftNumber { get; }
-        public Teams Team { get; }
+        public NbaTeams Team { get; }
 
-        public Players(
+        public NbaPlayers(
             int id,
             string firstName,
             string lastName,
@@ -29,7 +29,7 @@
             int? draftYear,
             int? draftRound,
             int? draftNumber,
-            Teams team)
+            NbaTeams team)
         {
             Id = id;
             FirstName = firstName;
