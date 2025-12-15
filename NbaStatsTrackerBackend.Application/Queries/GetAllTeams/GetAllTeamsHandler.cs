@@ -24,7 +24,7 @@ public class GetAllTeamsHandler : IRequestHandler<GetAllTeamsRequest, GetAllTeam
         if (queryParams.Any())
             endpoint += "?" + string.Join("&", queryParams);
 
-        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, cancellationToken);
+        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint);
 
         if (jsonDocument?.RootElement.TryGetProperty("data", out var data) != true)
             return new GetAllTeamsResponse([]);

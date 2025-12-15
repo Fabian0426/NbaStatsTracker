@@ -20,7 +20,7 @@ public class GetASpecificTeamHandler : IRequestHandler<GetASpecificTeamRequest, 
     {
         string endpoint = $"v1/teams/{request.Id}";
 
-        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, cancellationToken);
+        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint);
 
         if (jsonDocument?.RootElement.TryGetProperty("data", out var teamElement) != true)
             return new GetASpecificTeamResponse([]);

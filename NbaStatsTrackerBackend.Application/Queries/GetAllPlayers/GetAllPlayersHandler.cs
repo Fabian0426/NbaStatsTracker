@@ -1,7 +1,6 @@
 using MediatR;
 using NbaStatsTrackerBackend.Application.Interfaces;
 using NbaStatsTrackerBackend.Domain.Entities;
-using System.Globalization;
 using System.Text.Json;
 
 namespace NbaStatsTrackerBackend.Application.Queries.GetAllPlayers;
@@ -20,24 +19,15 @@ public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersRequest, GetAll
         CancellationToken cancellationToken)
     {
         List<string> queryParams = new List<string>();
-        if (request.per_page.HasValue)
-            queryParams.Add($"per_page={request.per_page}");
 
-        if (!string.IsNullOrWhiteSpace(request.search))
-            queryParams.Add($"search={request.search}");
+        if (!string.IsNullOrWhiteSpace(request.Search))
+            queryParams.Add($"search={request.Search}");
+        
+        if (request.Page.HasValue)
+            queryParams.Add($"page={request.Page.Value}");
 
-        if (!string.IsNullOrWhiteSpace(request.first_name))
-            queryParams.Add($"search={request.first_name}");
-
-        if (!string.IsNullOrWhiteSpace(request.last_name))
-            queryParams.Add($"search={request.last_name}");
-
-        foreach(var teamId in request.team_ids ?? [])
-            queryParams.Add($"team_ids[]={teamId}");
-
-        foreach (var playerId in request.player_ids ?? [])
-            queryParams.Add($"player_ids[]={playerId}");
-
+        if (request.PerPage.HasValue)
+            queryParams.Add($"per_page={request.PerPage.Value}");
 
         string endpoint = "v1/players";
         if (queryParams.Any())
@@ -67,36 +57,18 @@ public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersRequest, GetAll
                 playerElement.GetProperty("first_name").GetString() ?? string.Empty,
                 playerElement.GetProperty("last_name").GetString() ?? string.Empty,
                 playerElement.GetProperty("position").GetString() ?? string.Empty,
-                GetStringSafe(playerElement, "height"),
-                GetStringSafe(playerElement, "weight"),
-                GetStringSafe(playerElement, "jersey_number"),
-                GetStringSafe(playerElement, "college"),
-                GetStringSafe(playerElement, "country"),
-                GetIntSafe(playerElement, "draft_year"),
-                GetIntSafe(playerElement, "draft_round"),
-                GetIntSafe(playerElement, "draft_number"),
+                playerElement.TryGetProperty("height", out var heightProp) ? heightProp.GetString() : null,
+                playerElement.TryGetProperty("weight", out var weightProp) ? weightProp.GetString() : null,
+                playerElement.TryGetProperty("jersey_number", out var jerseyProp) ? jerseyProp.GetString() : null,
+                playerElement.TryGetProperty("college", out var collegeProp) ? collegeProp.GetString() : null,
+                playerElement.TryGetProperty("country", out var countryProp) ? countryProp.GetString() : null,
+                playerElement.TryGetProperty("draft_year", out var draftYearProp) && draftYearProp.ValueKind == JsonValueKind.Number ? draftYearProp.GetInt32() : null,
+                playerElement.TryGetProperty("draft_round", out var draftRoundProp) && draftRoundProp.ValueKind == JsonValueKind.Number ? draftRoundProp.GetInt32() : null,
+                playerElement.TryGetProperty("draft_number", out var draftNumberProp) && draftNumberProp.ValueKind == JsonValueKind.Number ? draftNumberProp.GetInt32() : null,
                 team
             ));
         }
 
         return new GetAllPlayersResponse(players);
-    }
-
-    private static string? GetStringSafe(JsonElement element, string propertyName)
-    {
-        if (element.TryGetProperty(propertyName, out var property) && property.ValueKind != JsonValueKind.Null)
-        {
-            return property.ToString();
-        }
-        return null;
-    }
-
-    private static int? GetIntSafe(JsonElement element, string propertyName)
-    {
-        if (element.TryGetProperty(propertyName, out var property) && property.ValueKind == JsonValueKind.Number)
-        {
-            return property.GetInt32();
-        }
-        return null;
     }
 }
