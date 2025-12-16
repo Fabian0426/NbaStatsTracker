@@ -1,9 +1,12 @@
-﻿namespace NbaStatsTrackerBackend.Application.Errors
+﻿using System.Globalization;
+
+namespace NbaStatsTrackerBackend.Application.Errors
 {
     public class Errors
     {
-        public const string TeamsNotFound = "The nba teams were not found.";
+        public const string TeamsNotFound = "Error finding teams.";
         public const string SpecificTeamNotFound = "The specified team was not found.";
 
+        public const string PlayersNotFound = "Error finding players.";
     }
 }

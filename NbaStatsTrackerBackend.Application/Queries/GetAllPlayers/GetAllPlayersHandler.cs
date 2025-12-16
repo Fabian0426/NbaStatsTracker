@@ -2,6 +2,7 @@ using MediatR;
 using NbaStatsTrackerBackend.Application.Interfaces;
 using NbaStatsTrackerBackend.Domain.Entities;
 using System.Text.Json;
+using NbaStatsTrackerBackend.Application.Utils;
 
 namespace NbaStatsTrackerBackend.Application.Queries.GetAllPlayers;
 
@@ -20,14 +21,27 @@ public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersRequest, GetAll
     {
         List<string> queryParams = new List<string>();
 
-        if (!string.IsNullOrWhiteSpace(request.Search))
-            queryParams.Add($"search={request.Search}");
+        if( request.cursor.HasValue)
+            queryParams.Add($"cursor={request.cursor.Value}");
         
-        if (request.Page.HasValue)
-            queryParams.Add($"page={request.Page.Value}");
+        if (request.per_page.HasValue)
+            queryParams.Add($"per_page={request.per_page.Value}");
 
-        if (request.PerPage.HasValue)
-            queryParams.Add($"per_page={request.PerPage.Value}");
+        if (!string.IsNullOrWhiteSpace(request.search))
+            queryParams.Add($"search={request.search}");
+
+        if (!string.IsNullOrWhiteSpace(request.first_name))
+            queryParams.Add($"first_name={request.first_name}");
+
+        if (!string.IsNullOrWhiteSpace(request.last_name))
+            queryParams.Add($"last_name={request.last_name}");
+
+        foreach(var teamId in request.team_ids ?? new List<int>())
+            queryParams.Add($"team_ids[]={teamId}");
+
+        foreach (var playerId in request.player_ids ?? new List<int>())
+            queryParams.Add($"player_ids[]={playerId}");
+
 
         string endpoint = "v1/players";
         if (queryParams.Any())
@@ -57,14 +71,14 @@ public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersRequest, GetAll
                 playerElement.GetProperty("first_name").GetString() ?? string.Empty,
                 playerElement.GetProperty("last_name").GetString() ?? string.Empty,
                 playerElement.GetProperty("position").GetString() ?? string.Empty,
-                playerElement.TryGetProperty("height", out var heightProp) ? heightProp.GetString() : null,
-                playerElement.TryGetProperty("weight", out var weightProp) ? weightProp.GetString() : null,
-                playerElement.TryGetProperty("jersey_number", out var jerseyProp) ? jerseyProp.GetString() : null,
-                playerElement.TryGetProperty("college", out var collegeProp) ? collegeProp.GetString() : null,
-                playerElement.TryGetProperty("country", out var countryProp) ? countryProp.GetString() : null,
-                playerElement.TryGetProperty("draft_year", out var draftYearProp) && draftYearProp.ValueKind == JsonValueKind.Number ? draftYearProp.GetInt32() : null,
-                playerElement.TryGetProperty("draft_round", out var draftRoundProp) && draftRoundProp.ValueKind == JsonValueKind.Number ? draftRoundProp.GetInt32() : null,
-                playerElement.TryGetProperty("draft_number", out var draftNumberProp) && draftNumberProp.ValueKind == JsonValueKind.Number ? draftNumberProp.GetInt32() : null,
+                Utils.Utils.GetStringSafe(playerElement, "height"),
+                Utils.Utils.GetStringSafe(playerElement, "weight"),
+                Utils.Utils.GetStringSafe(playerElement, "jersey_number"),
+                Utils.Utils.GetStringSafe(playerElement, "college"),
+                Utils.Utils.GetStringSafe(playerElement, "country"),
+                Utils.Utils.GetIntSafe(playerElement, "draft_year"),
+                Utils.Utils.GetIntSafe(playerElement, "draft_round"),
+                Utils.Utils.GetIntSafe(playerElement, "draft_number"),
                 team
             ));
         }
