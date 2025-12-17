@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using NbaStatsTrackerBackend.Application.Errors;
 using NbaStatsTrackerBackend.Application.Queries.GetAllPlayers;
+using NbaStatsTrackerBackend.Application.Queries.GetASpecificPlayer;
+using NbaStatsTrackerBackend.Application.UseCases.GetASpecificTeam;
 
 namespace NbaStatsTrackerBackend.Controllers
 {
@@ -43,6 +45,23 @@ namespace NbaStatsTrackerBackend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, Errors.PlayersNotFound);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetASpecificPlayerResponse>> GetASpecificPlayer(
+            [FromRoute] int id)
+        {
+            try
+            {
+                var request = new GetASpecificPlayerRequest(id);
+                var response = await _mediator.Send(request, HttpContext.RequestAborted);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, Errors.SpecificPlayerNotFound);
             }
         }
 
