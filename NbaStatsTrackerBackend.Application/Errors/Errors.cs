@@ -9,5 +9,7 @@ namespace NbaStatsTrackerBackend.Application.Errors
 
         public const string PlayersNotFound = "Error finding players.";
         public const string SpecificPlayerNotFound = "The specified player was not found.";
+
+        public const string GamesNotFound = "Error finding games.";
     }
 }

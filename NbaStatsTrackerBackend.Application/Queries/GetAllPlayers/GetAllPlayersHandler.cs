@@ -2,7 +2,6 @@ using MediatR;
 using NbaStatsTrackerBackend.Application.Interfaces;
 using NbaStatsTrackerBackend.Domain.Entities;
 using System.Text.Json;
-using NbaStatsTrackerBackend.Application.Utils;
 
 namespace NbaStatsTrackerBackend.Application.Queries.GetAllPlayers;
 
@@ -36,12 +35,17 @@ public class GetAllPlayersHandler : IRequestHandler<GetAllPlayersRequest, GetAll
         if (!string.IsNullOrWhiteSpace(request.last_name))
             queryParams.Add($"last_name={request.last_name}");
 
-        foreach(var teamId in request.team_ids ?? new List<int>())
-            queryParams.Add($"team_ids[]={teamId}");
+        if (request.team_ids != null && request.team_ids.Any())
+        {
+            foreach (var teamId in request.team_ids ?? new List<int>())
+                queryParams.Add($"team_ids[]={teamId}");
+        }
 
-        foreach (var playerId in request.player_ids ?? new List<int>())
-            queryParams.Add($"player_ids[]={playerId}");
-
+        if (request.player_ids != null && request.player_ids.Any())
+        {
+            foreach (var playerId in request.player_ids ?? new List<int>())
+                queryParams.Add($"player_ids[]={playerId}");
+        }
 
         string endpoint = "v1/players";
         if (queryParams.Any())

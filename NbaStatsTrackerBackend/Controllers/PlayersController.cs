@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NbaStatsTrackerBackend.Application.Errors;
 using NbaStatsTrackerBackend.Application.Queries.GetAllPlayers;
 using NbaStatsTrackerBackend.Application.Queries.GetASpecificPlayer;
-using NbaStatsTrackerBackend.Application.UseCases.GetASpecificTeam;
 
 namespace NbaStatsTrackerBackend.Controllers
 {
@@ -30,7 +29,7 @@ namespace NbaStatsTrackerBackend.Controllers
         {
             try
             {
-                var request = new GetAllPlayersRequest(
+                GetAllPlayersRequest request = new GetAllPlayersRequest(
                     cursor,
                     per_page,
                     search,
@@ -39,7 +38,7 @@ namespace NbaStatsTrackerBackend.Controllers
                     team_ids ?? new List<int>(),
                     player_ids ?? new List<int>()
                 );
-                var response = await _mediator.Send(request, HttpContext.RequestAborted);
+                GetAllPlayersResponse response = await _mediator.Send(request, HttpContext.RequestAborted);
                 return Ok(response);
             }
             catch (Exception)
