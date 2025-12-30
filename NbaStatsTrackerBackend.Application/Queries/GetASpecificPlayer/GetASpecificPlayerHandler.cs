@@ -20,7 +20,7 @@ public class GetASpecificPlayerHandler : IRequestHandler<GetASpecificPlayerReque
     {
         string endpoint = $"v1/players/{request.Id}";
 
-        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint);
+        var jsonDocument = await _apiClient.GetAsync<JsonDocument>(endpoint, cancellationToken);
 
         if (jsonDocument?.RootElement.TryGetProperty("data", out var playerElement) != true)
             return new GetASpecificPlayerResponse([]);

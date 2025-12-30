@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace NbaStatsTrackerBackend.Application.Errors
+﻿namespace NbaStatsTrackerBackend.Application.Errors
 {
     public class Errors
     {
