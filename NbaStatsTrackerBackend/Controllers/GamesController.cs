@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NbaStatsTrackerBackend.Application.Errors;
 using NbaStatsTrackerBackend.Application.Queries.GetAllGames;
+using NbaStatsTrackerBackend.Application.Queries.GetASpecificGame;
+using NbaStatsTrackerBackend.Application.UseCases.GetASpecificTeam;
 
 namespace NbaStatsTrackerBackend.Controllers
 {
@@ -46,6 +48,23 @@ namespace NbaStatsTrackerBackend.Controllers
             catch (Exception)
             {
                 return StatusCode(500, Errors.GamesNotFound); 
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<GetASpecificGameResponse>> GetASpecificGame(
+            [FromRoute] int id)
+        {
+            try
+            {
+                var request = new GetASpecificGameRequest(id);
+                var response = await _mediator.Send(request, HttpContext.RequestAborted);
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, Errors.SpecificGameNotFound);
             }
         }
     }

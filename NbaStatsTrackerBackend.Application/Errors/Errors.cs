@@ -9,5 +9,6 @@
         public const string SpecificPlayerNotFound = "The specified player was not found.";
 
         public const string GamesNotFound = "Error finding games.";
+        public const string SpecificGameNotFound = "The game player was not found.";
     }
 }
